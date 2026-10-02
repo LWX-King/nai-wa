@@ -51,7 +51,53 @@
     <p><b>把手机横过来</b>，画面会大一倍<br>竖屏也能玩，就是字会小</p>
     <button class="btn" id="rotate-ok" type="button">竖着也能玩，继续</button>
   </div>
+
+  <!-- 出错时把真实原因显示出来（浏览器默认只会给 "Script error."） -->
+  <div id="err-box">
+    <div class="eb-head">⚠ 出错了 <span class="eb-n">（第 <b id="err-n">1</b> 个）</span>
+      <button type="button" onclick="document.getElementById('err-box').style.display='none'">×</button></div>
+    <div class="eb-msg" id="err-msg"></div>
+    <pre class="eb-detail" id="err-detail"></pre>
+    <div class="eb-tip">把这段内容截图发给作者即可定位问题。</div>
+  </div>
 </div>
+
+<script>
+  // ---- 错误捕获：放在所有脚本之前 ----
+  // 手机上浏览器为了"安全"会把跨源脚本的错误统一报成 "Script error."，
+  // 看不到真实原因。这里直接把真实错误和堆栈显示在画面上，
+  // 这样遇到问题不用猜、也不用连电脑调试。
+  window.__ERR = [];
+  (function () {
+    function show(msg, detail) {
+      window.__ERR.push(msg + (detail ? ' :: ' + detail : ''));
+      var box = document.getElementById('err-box');
+      if (!box) return;
+      box.style.display = 'block';
+      // 累积显示所有错误，而不是只显示最后一个 —— 定位问题更有用
+      var n = document.getElementById('err-n');
+      if (n) n.textContent = window.__ERR.length;
+      var lines = [];
+      for (var i = 0; i < window.__ERR.length && i < 6; i++) lines.push((i + 1) + '. ' + window.__ERR[i]);
+      document.getElementById('err-msg').textContent = msg;
+      document.getElementById('err-detail').textContent = lines.join('\n\n');
+    }
+    window.__showErr = show;
+    window.addEventListener('error', function (e) {
+      // 资源加载失败（img/script）也会走这里，用 target 区分
+      if (e.target && e.target !== window && (e.target.src || e.target.href)) {
+        show('资源加载失败：' + (e.target.src || e.target.href).split('/').slice(-1)[0]);
+        return;
+      }
+      show(e.message || '脚本错误（无信息）',
+        (e.filename || '').split('/').slice(-1)[0] + ':' + (e.lineno || 0) + (e.error && e.error.stack ? '\n' + e.error.stack.split('\n').slice(0, 3).join('\n') : ''));
+    }, true);
+    window.addEventListener('unhandledrejection', function (e) {
+      var r = e.reason;
+      show('异步错误：' + (r && r.message ? r.message : String(r)), r && r.stack ? r.stack.split('\n').slice(0, 3).join('\n') : '');
+    });
+  })();
+</script>
 
 <script src="js/sprites.js"></script>
 <script src="js/art.js"></script>
@@ -65,7 +111,18 @@
 <script>
   // 引擎在 DOMContentLoaded 里 boot；章节脚本已按顺序就位。
   window.addEventListener('load', function () {
-    if (!window.CHAPTERS.ch1) console.error('章节未加载');
+    // 别直接读 window.CHAPTERS.ch1 —— 万一某个脚本没加载成功，
+    // 这里会抛 TypeError，而手机浏览器只会显示 "Script error."
+    if (!window.CHAPTERS || !window.CHAPTERS.ch1) {
+      var missing = ['CHAPTERS', 'ENGINE', 'ART', 'AUDIO', 'NAIWA_SPRITES', 'VOICE_MANIFEST', 'UI']
+        .filter(function (k) { return !window[k]; });
+      if (window.__showErr) {
+        window.__showErr('游戏脚本没加载完整',
+          missing.length ? '缺少：' + missing.join('、') + '\n（如果是手机上打开的，可能是文件没传全）'
+            : 'CHAPTERS 里没有第一章');
+      }
+      return;
+    }
     // 浏览器要求用户交互后才允许出声：第一次点击补上 BGM
     var once = function () {
       if (window.AUDIO) window.AUDIO.unlock();

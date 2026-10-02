@@ -44,6 +44,14 @@
   function $(id) { return document.getElementById(id); }
 
   function boot() {
+    // 先确认依赖脚本都到位。少一个就明确报出来，
+    // 不然会在下面某行抛 TypeError，手机浏览器只显示 "Script error."
+    var need = ['NAIWA_SPRITES', 'ART', 'AUDIO', 'VOICE_MANIFEST', 'CHAPTERS'];
+    var lack = need.filter(function (k) { return !window[k]; });
+    if (lack.length) {
+      if (window.__showErr) window.__showErr('引擎缺少依赖脚本', '未加载：' + lack.join('、'));
+      return;
+    }
     stage = $('stage');
     layerBg = $('layer-bg');
     layerScene = $('layer-scene');

@@ -55,6 +55,28 @@ html, body {
   60%, 100% { transform: rotate(90deg); }
 }
 
+/* 错误浮层：浏览器默认只给 "Script error."，这里显示真实原因 */
+#err-box {
+  position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 300;
+  display: none; max-height: 46vh; overflow: auto;
+  background: #2a1418ee; border: 1px solid #ff6b6b88; border-radius: 12px;
+  padding: 12px 14px; color: #ffd9d9; font-size: 13px; line-height: 1.6;
+  box-shadow: 0 12px 40px #000c;
+}
+#err-box .eb-head { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #ff8f8f; margin-bottom: 6px; }
+#err-box .eb-n { font-weight: 400; color: #ffb3b3; font-size: 12px; }
+#err-box .eb-head button {
+  margin-left: auto; background: none; border: none; color: #ffb3b3;
+  font-size: 20px; line-height: 1; cursor: pointer; padding: 0 4px;
+}
+#err-box .eb-msg { color: #ffe9e9; font-weight: 600; word-break: break-all; }
+#err-box .eb-detail {
+  margin: 8px 0 0; padding: 8px; background: #00000055; border-radius: 8px;
+  font-size: 11px; color: #ffc9c9; white-space: pre-wrap; word-break: break-all;
+  font-family: ui-monospace, Consolas, monospace; max-height: 22vh; overflow: auto;
+}
+#err-box .eb-tip { margin-top: 8px; color: #ffb3b3aa; font-size: 11px; }
+
 /* 窄屏竖屏：卡片按内容撑开、整块面板滚动。
    否则卡片会被 flex 压成"舞台高度"那么矮，内容要内嵌滚动才点得到「开始」，
    手机上很难操作。 */
