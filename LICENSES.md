@@ -1,5 +1,24 @@
 # 素材来源与许可
 
+## 许可范围（先看这里）
+
+根目录的 [`LICENSE`](LICENSE)（MIT）**只覆盖本项目自己写的代码** ——
+`js/`、`tools/`、`index.html`、`style.css` 等。
+
+项目里打包的第三方素材各有各的许可，以本文件为准：
+
+| 内容 | 许可 | 来源 |
+|---|---|---|
+| 奶蛙像素贴图 | CC BY 4.0（需署名） | [Maple498/nai-wa-codex-pet](https://github.com/Maple498/nai-wa-codex-pet) |
+| 奶蛙笑声素材 | MIT | [WencueCryforme/NaiWa-Universe](https://github.com/WencueCryforme/NaiWa-Universe) |
+| 台词配音 | 本项目生成 | edge-tts 合成 + ffmpeg 变声 |
+| 场景 / 道具 / 背景 / UI | 本项目原创 | SVG / CSS 代码绘制 |
+| BGM | 本项目原创 | `tools/build-bgm.py` 程序合成 |
+
+**关于"奶蛙 / 奶龙"这个网络流行形象与音色原型**：其权利状态不由本项目
+或上述任何上游仓库确认或授予。个人使用、同人创作、发布视频没有问题；
+**如需商用请自行评估所在地区的法律风险。**
+
 ## 奶蛙贴图（游戏内实际使用的角色美术）
 
 - **来源**：<https://github.com/Maple498/nai-wa-codex-pet> 的 `spritesheet.webp`
@@ -39,8 +58,12 @@
 ## 配音是怎么来的
 
 台词用 `edge-tts`（微软 Edge 的免费 TTS）合成干声，再用 ffmpeg `rubberband`
-做变声处理（提音高 + 移共振峰 + 高通 + 提亮 + 轻失真），
-做出奶蛙那种"变声器感"。参数与流程见 `tools/build-voice.py` 顶部的 `VOICES` 表。
+变调 / 移共振峰，配 `lowpass` 压暗，调成奶蛙的音色。
+参数是对着公开二创作品《奶蛙：一百分的家》的原声自动校准出来的，
+流程见 `tools/build-voice.py` 顶部的 `VOICES` 表与 README。
+
+**笑声不经过任何变声处理**：整句就是一声笑的台词（`哈哈哈`、`哦齁齁齁。`）
+直接播真实笑声素材。
 
 ## 其他美术
 

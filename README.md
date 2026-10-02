@@ -1,9 +1,17 @@
 # 拣奶 · 奶蛙互动叙事
 
+[![在线试玩](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E8%AF%95%E7%8E%A9-lwx--king.github.io%2Fnai--wa-2ea44f?style=for-the-badge&logo=github)](https://lwx-king.github.io/nai-wa/)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![素材: CC BY 4.0](https://img.shields.io/badge/%E8%B4%B4%E5%9B%BE-CC%20BY%204.0-lightgrey.svg)](LICENSES.md)
+![HTML5](https://img.shields.io/badge/HTML5-%E9%9B%B6%E4%BE%9D%E8%B5%96-e34c26.svg)
+![三章](https://img.shields.io/badge/%E7%AB%A0%E8%8A%82-3%20%E7%AB%A0%20%C2%B7%2010%20%E7%BB%93%E5%B1%80-f5c518.svg)
+
 > 一个用**真奶蛙素材**做的浏览器互动叙事游戏。
 > 玩法结构参考《拣爱》：**选项不重要，你在场景里做了什么才重要。**
 >
-> 零安装、零依赖、不联网 —— 双击 `启动游戏.bat` 就能玩。
+> **▶ [点这里直接玩](https://lwx-king.github.io/nai-wa/)**（GitHub Pages，需要联网）
+> 或者双击 `启动游戏.bat` 离线玩 —— 零安装、零依赖、不联网。
 
 ## 截图
 
