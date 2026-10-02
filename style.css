@@ -20,17 +20,49 @@ html, body {
   overflow: hidden;
 }
 
-#screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+#screen { position: fixed; inset: 0; }
 
+/* 舞台固定按设计尺寸 1280x720 布局，再用 transform: scale() 整体缩放到视口。
+   这样手机上不会因为空间变小而把面板挤爆（之前竖屏下 #stage 只有 232px 高，
+   章节卡片 882px 溢出、点不到「开始」）。
+   指针坐标走 getBoundingClientRect()，缩放后自动正确。 */
 #stage {
-  position: relative;
-  width: min(100vw, calc(100vh * 16 / 9));
-  height: min(100vh, calc(100vw * 9 / 16));
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1280px;
+  height: 720px;
+  transform-origin: top left;
   background: #0e0e14;
   box-shadow: 0 24px 80px #000a, 0 0 0 1px #ffffff14;
   overflow: hidden;
   touch-action: none;
   user-select: none;
+}
+
+/* 竖屏提示：手机上竖着拿看不清，提示横屏。可关掉。 */
+#rotate-hint {
+  position: fixed; inset: 0; z-index: 200;
+  display: none; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px; background: #0a0a10f2; text-align: center; padding: 32px;
+}
+#rotate-hint.show { display: flex; }
+#rotate-hint .icon { font-size: 56px; animation: rot 2s ease-in-out infinite; }
+#rotate-hint p { margin: 0; color: var(--dim); font-size: 14px; line-height: 1.8; }
+#rotate-hint b { color: var(--yellow); }
+@keyframes rot {
+  0%, 40% { transform: rotate(0deg); }
+  60%, 100% { transform: rotate(90deg); }
+}
+
+/* 窄屏竖屏：卡片按内容撑开、整块面板滚动。
+   否则卡片会被 flex 压成"舞台高度"那么矮，内容要内嵌滚动才点得到「开始」，
+   手机上很难操作。 */
+@media (orientation: portrait) and (max-width: 560px) {
+  .panel { align-items: flex-start; }
+  .panel > .panel-card,
+  #chapter-panel .panel-card { max-height: none; overflow: visible; }
+  #chapter-panel { flex-direction: column; }
 }
 
 #scene-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }

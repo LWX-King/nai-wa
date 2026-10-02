@@ -72,11 +72,44 @@
 
     buildChapterBoard();
     hoverProbe();
+    fitStage();
+    window.addEventListener('resize', fitStage);
+    window.addEventListener('orientationchange', function () { setTimeout(fitStage, 120); });
+    var rok = $('rotate-ok');
+    if (rok) rok.addEventListener('click', function () {
+      hintDismissed = true;
+      $('rotate-hint').classList.remove('show');
+    });
 
     // ?audio 直接进音频自检页，省得点来点去
     if (/[?&]audio/.test(location.search)) {
       setTimeout(function () { window.UI.audioCheck(); }, 300);
     }
+  }
+
+  // 把 1280x720 的舞台整体缩放到视口里（保持 16:9，居中，留黑边）
+  // 竖屏手机上只按宽度算：横向不裁切、内容都在屏内，
+  // 代价是对白字偏小 —— 所以配一个"横过来"的提示引导。
+  function fitStage() {
+    var fit = Math.min(window.innerWidth / W, window.innerHeight / H);
+    var byWidth = window.innerWidth / W;
+    var portrait = window.innerHeight > window.innerWidth;
+    var small = Math.min(window.innerWidth, window.innerHeight) < 560;
+    var s = (small && portrait) ? Math.min(byWidth, fit * 1.25) : fit;
+    stage.style.transform = 'scale(' + s + ')';
+    stage.style.left = Math.round((window.innerWidth - W * s) / 2) + 'px';
+    stage.style.top = Math.round((window.innerHeight - H * s) / 2) + 'px';
+    updateRotateHint(s);
+  }
+
+  // 竖屏窄机上提示横屏（横过来画面大一倍多）
+  var hintDismissed = false;
+  function updateRotateHint(scale) {
+    var el = $('rotate-hint');
+    if (!el) return;
+    var portrait = window.innerHeight > window.innerWidth;
+    var small = Math.min(window.innerWidth, window.innerHeight) < 560;
+    el.classList.toggle('show', portrait && small && !hintDismissed);
   }
 
   // 指针 -> SVG 坐标
