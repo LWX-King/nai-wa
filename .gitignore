@@ -1,0 +1,27 @@
+# ---- 只用于本地音色分析的参考音频，不要上传 ----
+# 这些是从 B站作品《奶蛙：一百分的家》里抠出的原声片段，
+# 版权属于原 UP 主，仅用于校准变声参数，游戏本身不依赖它们。
+# 删掉不影响游戏运行；想重新调参就自己按 README 生成。
+tools/voice-ref-ep1.wav
+tools/voice-ref-ep2.wav
+tools/voice-ref-bilibili.mp3
+audio/_sample/
+
+# ---- 系统 / 编辑器杂项 ----
+Thumbs.db
+desktop.ini
+.DS_Store
+*.bak
+*.tmp
+*~
+.vscode/
+.idea/
+
+# ---- 生成过程的中间产物 ----
+tunevoice-*/
+iter-*/
+*.raw.mp3
+*.m4s
+
+# ---- 如果想自己保留一份变声试听音频，取消下面这行的注释 ----
+# audio/_audition/*.mp3

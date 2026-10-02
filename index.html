@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>拣奶 · 奶蛙互动叙事</title>
+<meta name="description" content="奶蛙互动叙事：不是选选项，是看你在场景里做了什么。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="screen">
+  <div id="stage">
+    <!-- 场景层：全部由代码画出来 -->
+    <svg id="scene-svg" viewBox="0 0 1280 720" preserveAspectRatio="none">
+      <g id="layer-bg"></g>
+      <g id="layer-scene"></g>
+    </svg>
+    <div id="layer-ui" class="layer"></div>
+    <div id="layer-fx" class="layer"></div>
+
+    <div id="hud">
+      <div id="hud-title">拣奶</div>
+      <div id="hud-right">
+        <div id="hud-gross-box">直男值 <span id="hud-gross">0</span></div>
+        <button class="hud-btn" id="btn-music" onclick="UI.toggleMusic()">♪ 音乐</button>
+        <button class="hud-btn" id="btn-voice" onclick="UI.toggleVoice()">🎙 配音</button>
+        <button class="hud-btn" id="btn-audio" onclick="UI.audioCheck()">🔍 自检</button>
+        <button class="hud-btn" onclick="UI.openChapters()">章节 / 结局册</button>
+      </div>
+    </div>
+
+    <div id="dialogue">
+      <div class="dlg-who" id="dlg-who"></div>
+      <div id="dlg-text"></div>
+      <div id="dlg-hint">点击继续 ▸</div>
+    </div>
+
+    <div id="toast"></div>
+    <div id="intro-panel" class="panel"></div>
+    <div id="ending-panel" class="panel"></div>
+    <div id="chapter-panel" class="panel show"></div>
+  </div>
+</div>
+
+<script src="js/sprites.js"></script>
+<script src="js/art.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/voice-manifest.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/chapter-kit.js"></script>
+<script src="js/chapter1.js"></script>
+<script src="js/chapter2.js"></script>
+<script src="js/chapter3.js"></script>
+<script>
+  // 引擎在 DOMContentLoaded 里 boot；章节脚本已按顺序就位。
+  window.addEventListener('load', function () {
+    if (!window.CHAPTERS.ch1) console.error('章节未加载');
+    // 浏览器要求用户交互后才允许出声：第一次点击补上 BGM
+    var once = function () {
+      if (window.AUDIO) window.AUDIO.unlock();
+      window.removeEventListener('pointerdown', once);
+    };
+    window.addEventListener('pointerdown', once);
+  });
+</script>
+</body>
+</html>

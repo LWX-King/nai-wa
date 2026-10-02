@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>奶蛙配音 · 对着原声校</title>
+<style>
+  body { background:#14141c; color:#f4f0e6; font-family:"Microsoft YaHei",system-ui; padding:24px 30px 76px; margin:0; line-height:1.6; }
+  h1 { font-size:21px; letter-spacing:4px; color:#f5c518; margin:0 0 6px; }
+  h2 { font-size:15px; color:#f5c518; margin:24px 0 10px; letter-spacing:2px; border-left:3px solid #f5c518; padding-left:9px; }
+  .tip { color:#a9a4b8; font-size:13px; margin:6px 0 14px; }
+  .row { display:flex; align-items:center; gap:13px; background:#ffffff0a; border:1px solid #ffffff1f;
+         border-radius:11px; padding:10px 15px; margin-bottom:8px; }
+  .name { width:210px; font-weight:700; font-size:14px; }
+  .desc { flex:1; color:#b9b3c6; font-size:12px; }
+  button { background:#f5c518; color:#2a2000; border:none; border-radius:999px; padding:7px 16px;
+           font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; white-space:nowrap; }
+  button:hover { filter:brightness(1.08); }
+  button.playing { background:#8ee3a8; }
+  .ref { border-color:#7ec8f0aa; background:#7ec8f00f; }
+  .mine { border-color:#f5c51888; background:#f5c51812; }
+  .laugh { border-color:#ff9ec466; background:#ff9ec40d; }
+  .bad { opacity:.62; }
+  table { border-collapse:collapse; font-size:13px; width:100%; max-width:640px; }
+  td, th { border:1px solid #ffffff1f; padding:6px 10px; text-align:left; }
+  th { color:#f5c518; font-weight:600; }
+  .ok { color:#8ee3a8; }
+  #pick { position:fixed; left:0; right:0; bottom:0; background:#f5c518; color:#2a2000;
+          font-weight:700; padding:9px 30px; font-size:14px; }
+  code { background:#ffffff14; padding:1px 5px; border-radius:4px; font-size:12px; }
+</style>
+</head>
+<body>
+<h1>奶蛙配音 · 对着原声校</h1>
+<p class="tip">
+  这次是拿《奶蛙：一百分的家》的**原声**做基准：先用
+  <code>tools/extract-voice-ref.py</code> 从整集里自动抠出"奶蛙音区"的片段，
+  再用 <code>tools/iterate-voice.py</code> 按比值迭代校正参数，直到指标收敛。
+</p>
+
+<h2>先听原声，再听我的（同一条顺序）</h2>
+<div id="all"></div>
+
+<h2>收敛结果</h2>
+<table>
+  <tr><th>指标</th><th>奶蛙原声</th><th>我的成品</th></tr>
+  <tr><td>基频 f0（音高）</td><td>374 Hz</td><td class="ok">371 Hz</td></tr>
+  <tr><td>谱质心（亮度）</td><td>1449 Hz</td><td class="ok">1518 Hz</td></tr>
+  <tr><td>85% 滚降</td><td>2422 Hz</td><td class="ok">2498 Hz</td></tr>
+  <tr><td>谱包络相关</td><td>—</td><td class="ok">0.845</td></tr>
+</table>
+<p class="tip" style="margin-top:10px">
+  参数：<code>pitch 1.75 / formant 1.02 / lowpass 2400</code>。
+  注意这里**是低通压暗**，不是提亮 —— 奶蛙的音色比我原来用的 TTS 还暗，
+  之前几版一直往"更尖更亮"调，方向就是错的。
+</p>
+
+<p id="pick">还没试听</p>
+
+<script>
+function build(boxId, items) {
+  const box = document.getElementById(boxId);
+  let cur = null;
+  items.forEach(([f, n, d, cls]) => {
+    const row = document.createElement('div');
+    row.className = 'row ' + (cls || '');
+    row.innerHTML = '<div class="name">' + n + '</div><div class="desc">' + d + '</div>';
+    const b = document.createElement('button');
+    b.textContent = '▶ 试听';
+    b.onclick = () => {
+      if (cur) cur.pause();
+      document.querySelectorAll('button').forEach(x => { x.textContent = '▶ 试听'; x.classList.remove('playing'); });
+      const a = new Audio(f);
+      a.play();
+      cur = a; b.textContent = '⏸ 播放中'; b.classList.add('playing');
+      a.onended = () => { b.textContent = '▶ 试听'; b.classList.remove('playing'); };
+      document.getElementById('pick').textContent = '当前：' + n + '　（' + d + '）';
+    };
+    row.appendChild(b);
+    box.appendChild(row);
+  });
+}
+build('all', [
+  ['0-奶蛙原声_一百分的家.mp3', '★ 奶蛙原声（基准）', '《奶蛙：一百分的家》第二集，从整集里自动抠出的奶蛙音区前 9 秒', 'ref'],
+  ['1-我的成品_新参数.mp3', '★ 我的成品（新参数）', 'pitch 1.75 / formant 1.02 / lowpass 2400，已收敛到原声指标', 'mine'],
+  ['2-上一版_太亮.mp3', '上一版（太亮）', 'pitch 1.70 / formant 1.39 + 提亮 4.5dB —— 就是你说不对的那版', 'bad'],
+  ['3-真实笑声_没动.mp3', '真实笑声（没动）', '游戏里所有"哈哈哈/哦齁齁齁"都用它，不做变声', 'laugh'],
+  ['4-她的声音.mp3', '她的声音', '只提一点，保持女声自然', '']
+]);
+</script>
+</body>
+</html>

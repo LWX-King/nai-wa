@@ -1,0 +1,18 @@
+# 统一换行符，避免 Windows/Linux 协作时整文件 diff
+* text=auto eol=lf
+
+# 二进制素材不要动
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.mp3 binary
+*.wav binary
+*.m4a binary
+*.mp4 binary
+*.sprites binary
+
+# Windows 批处理要保留 CRLF，否则可能双击没反应
+*.bat text eol=crlf
+*.cmd text eol=crlf

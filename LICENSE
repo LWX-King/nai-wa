@@ -1,0 +1,37 @@
+MIT License
+
+Copyright (c) 2026 LWX-King
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---------------------------------------------------------------------------
+关于素材（重要）
+
+上面这条 MIT 只覆盖**本项目自己写的代码**（js/、tools/、index.html、
+style.css 等）。项目里还打包了第三方素材，各自许可见 LICENSES.md：
+
+- 奶蛙像素贴图 —— CC BY 4.0，来源 Maple498/nai-wa-codex-pet（需保留署名）
+- 奶蛙笑声素材 —— MIT，来源 WencueCryforme/NaiWa-Universe
+- 台词配音 —— 本项目用 edge-tts 合成 + ffmpeg 变声处理生成
+- 场景 / 道具 / 背景 —— 本项目用 SVG 代码绘制
+- BGM —— tools/build-bgm.py 程序合成
+
+**"奶蛙 / 奶龙"这个网络流行形象与音色原型，其权利状态不由本项目或上述
+上游仓库确认。** 个人使用、同人创作、发布视频没有问题；
+如需商用请自行评估所在地区的法律风险。
